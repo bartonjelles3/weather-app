@@ -1,5 +1,0 @@
-apiVersion: v2
-name: networking
-description: Networking resources for weather app (nginx, etc.)
-type: application
-version: "1.0"

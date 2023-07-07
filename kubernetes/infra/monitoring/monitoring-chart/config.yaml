@@ -1,9 +1,0 @@
-global:
-  scrape_interval: 5s
-scrape_configs:
-- job_name: 'weather-frontend'
-  static_configs:
-  - targets: ['weather-frontend-svc.weather-app.svc.cluster.local:8080']
-- job_name: 'weather-query'
-  static_configs:
-  - targets: ['weather-query-svc.weather-app.svc.cluster.local:8081']

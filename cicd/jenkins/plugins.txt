@@ -1,3 +1,0 @@
-configuration-as-code:1646.v98b_72d209775
-google-login:1.7
-docker-workflow:563.vd5d2e5c4007f
