@@ -10,8 +10,8 @@ application = flask.Flask(__name__)
 duration = prometheus_client.Summary('request_processing_seconds',
                                     'Time spent processing weather request')
 
-# Set http://localhost:8081/weather_query if running locally
-query_address = os.environ["WEATHER_QUERY_ADDRESS"]
+query_svc_addr = os.environ["QUERY_SVC_ADDR"]
+weather_query_addr = query_svc_addr + '/weather_query'
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,10 +26,10 @@ def get_weather():
     'Gets the weather via an API call to a backend that queries OpenWeatherMap.'
     data = {'zip': flask.request.args.get('zip')}
     headers = {'Content-Type': 'application/json'}
-    logging.info(f'Sending request to {query_address}')
+    logging.info(f'Sending request to {weather_query_addr}')
     
     try:
-        response = requests.post(query_address,
+        response = requests.get(weather_query_addr,
                                  data=json.dumps(data), headers=headers)
         response.raise_for_status() 
         
@@ -45,5 +45,14 @@ def get_weather():
 def metrics():
     return prometheus_client.generate_latest()
 
+@application.route('/readyz')
+def readyz():
+    try:
+        weather_resp = requests.get(f'{query_svc_addr}/readyz')
+        weather_resp.raise_for_status()
+    except requests.exceptions.RequestException as err:
+        flask.abort(503)
+    return flask.Response('Weather frontend: good', status=200)
+
 if __name__ == '__main__':
-    application.run(host="0.0.0.0", port=80)
+    application.run(host="0.0.0.0", port=80, debug=True)

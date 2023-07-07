@@ -4,14 +4,14 @@ metadata:
   name: weather-query-svc
   labels:
     app: weather
-    app-tier: query
+    app-tier: backend
 spec:
   type: NodePort
   ports:
   - port: 80
   selector:
         app: weather
-        app-tier: query
+        app-tier: backend
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -19,21 +19,31 @@ metadata:
   name: weather-query-deployment
   labels:
     app: weather
-    app-tier: query
+    app-tier: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
         app: weather
-        app-tier: query
+        app-tier: backend
   template:
     metadata:
       labels:
         app: weather
-        app-tier: query
+        app-tier: backend
     spec:
       containers:
       - name: weather-query-container
         image: us-west1-docker.pkg.dev/weather-app-391906/docker-images/weather-query:1.0
         ports:
         - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 80
+          initialDelaySeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 30

@@ -38,5 +38,15 @@ spec:
         ports:
         - containerPort: 80
         env:
-        - name: WEATHER_QUERY_ADDRESS
-          value: "http://weather-query-svc/weather_query"
+        - name: QUERY_SVC_ADDR
+          value: "http://weather-query-svc"
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 80
+          initialDelaySeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 30

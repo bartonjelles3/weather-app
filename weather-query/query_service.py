@@ -47,6 +47,16 @@ def weather_query():
 def metrics():
     return prometheus_client.generate_latest()
 
+@application.route('/readyz')
+def readyz():
+    'Check if service is ready by querying OWM with lat 0, lon 0 (Null Island ;)'
+    try:
+        weather_resp = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat=0&lon=0&units=imperial&appid={API_KEY}')
+        weather_resp.raise_for_status()
+    except requests.exceptions.RequestException as err:
+        flask.abort(503)
+    return flask.Response('Weather query service: good', status=200)
+
 if __name__ == '__main__':
     application.run(host="0.0.0.0", port=80)
 
