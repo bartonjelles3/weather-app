@@ -9,7 +9,7 @@ spec:
   destination:
     namespace: app
     server: {{ .Values.spec.destination.server }}
-  project: default
+  project: app
   source:
     path: infra/charts/weather-app-main
     repoURL: {{ .Values.spec.source.repoURL }}
