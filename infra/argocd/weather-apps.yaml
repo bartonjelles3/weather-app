@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: weather-apps
+spec:
+  destination:
+    name: ''
+    namespace: app
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: infra/helm/weather-apps-chart
+    repoURL: 'https://github.com/bartonjelles3/weather-app'
+    targetRevision: HEAD
+  project: app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

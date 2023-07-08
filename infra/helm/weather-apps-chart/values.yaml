@@ -2,5 +2,5 @@ spec:
   destination:
     server: https://kubernetes.default.svc
   source:
-    repoChartsURL: https://github.com/bartonjelles3/weather-app/infra/helm
+    repoURL: https://github.com/bartonjelles3/weather-app
     targetRevision: HEAD
