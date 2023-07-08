@@ -1,5 +1,5 @@
 apiVersion: v2
-name: apps
+name: weather-apps
 description: Parent chart for all weather-app charts
 type: application
 version: "1.0"
