@@ -53,7 +53,7 @@ def readyz():
     try:
         weather_resp = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat=0&lon=0&units=imperial&appid={API_KEY}')
         weather_resp.raise_for_status()
-    except requests.exceptions.RequestException as err:
+    except requests.exceptions.RequestException:
         flask.abort(503)
     return flask.Response('Weather query service: good', status=200)
 
